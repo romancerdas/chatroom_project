@@ -6,6 +6,11 @@ HOST = "127.0.0.1" # Set IP address     # for now, HOST will be set as the local
 PORT = 5000 # Set Port number     # same as IP, set to 5000 for now, will be updated later in development 
 
 clients = [] # an array to hold multiple clients
+rooms = {
+    "general": []
+}
+
+client_rooms = {}
 
 def handle_client(conn, addr):
     print(f"New Client has connected [{addr}]") # terminal message to states client connection and client address
@@ -20,11 +25,43 @@ def handle_client(conn, addr):
             message = decode_message(data) # assigns message variable to the decoded data
             print(f"Incoming message from {addr}: {message}") # print message and sender address in recipient terminal 
 
-            for client in clients: # send message to all clients in client array 
-                if client != conn: # if the client is not the sender, send the message to the client 
-                    client.send(data) # sends the data to the client
+            if message["type"] == "JOIN_ROOM": # checks if the message is a request to join a room
+                room = message["room"]
+                if room not in rooms:
+                    rooms[room] = []
+                if conn not in rooms[room]:
+                    rooms[room].append(conn)
+                client_rooms[conn] = room 
 
-        except: # error handling (i.e. disconnection)
+                print(f"{addr} has joined room {room}")
+
+            if message["type"] == "SEND_MESSAGE":
+                room = client_rooms.get(conn)
+
+                if room:
+                    for client in rooms[room]:
+                        if client != conn:
+                            try:
+                                client.send(data)
+                            except Exception as e:
+                                print(f"Failed to send message: {e}")       
+
+            if message["type"] == "LEAVE_ROOM":
+                room = message["room"]
+
+                if room in rooms and conn in rooms[room]:
+                    rooms[room].remove(conn)
+
+                if conn in client_rooms: 
+                    del client_rooms[conn]
+
+                print(f"{message['username']} has left the room {room}.")
+
+                continue
+
+
+        except Exception as e:
+            print(f"Server error with {addr}: {e}")
             break
 
     print(f"Client has disconnected [{addr}]") # terminal message to states client disconnection and client address

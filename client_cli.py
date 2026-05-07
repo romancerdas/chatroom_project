@@ -9,8 +9,18 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # creates a server si
 client.connect((HOST, PORT)) # connects to the client socket at HOST and PORT 
 
 username = input("Enter username: ") # user inputs a username 
+room = input("Enter room name: ")
 
 running = True # variable to control loops
+
+join_message = {
+    "type": "JOIN_ROOM",
+    "username": username,
+    "room": room
+}
+
+client.send(encode_message(join_message)) 
+
 
 def receive_messages(): # defines how to handle incoming messages 
 
@@ -27,8 +37,9 @@ def receive_messages(): # defines how to handle incoming messages
 
             message = decode_message(data) # assigns message variable to the decoded data
 
-            print(f"\n [{message['username']}]: {message['message']}") # prints incoming message to terminal 
-            print("Enter message, or type 'quit': ", end="") # reprints message prompt after incoming message is printed
+            if message["type"] == "SEND_MESSAGE":
+                print(f"\n [{message['username']}]: {message['message']}") # prints incoming message to terminal 
+                print("Enter message, or type 'quit': ", end="") # reprints message prompt after incoming message is printed
 
         except: # error handling (i.e. disconnection)
             break 
@@ -43,8 +54,32 @@ thread.start() # starts the thread
 while True: # message compiler loop
     text = input("Enter message, or type quit: ") # user types a message or quits 
 
+    if text.lower() == "leave": 
+            leave_message = {
+                "type": "LEAVE_ROOM",
+                "username": username,
+                "room": room
+            }   
+            client.send(encode_message(leave_message))
+            (print(f"You have left the room {room}."))
+
+            room = input("Enter room name: ")
+
+            join_message = {
+                "type": "JOIN_ROOM",
+                "username": username,
+                "room": room
+            }
+
+            client.send(encode_message(join_message))
+
+            continue 
+    
+    
     if text.lower() == "quit": # checks if user wants to quit 
         break
+
+    
 
     message = { # JSON composition of the message to be sent to server 
         "type": "SEND_MESSAGE",
