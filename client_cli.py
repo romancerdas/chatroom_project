@@ -84,6 +84,7 @@ while True: # message compiler loop
     message = { # JSON composition of the message to be sent to server 
         "type": "SEND_MESSAGE",
         "username": username,
+        "room": room,
         "message": text
     }
 

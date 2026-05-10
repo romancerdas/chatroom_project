@@ -1,38 +1,41 @@
 # Overview
 
- <!-- {Important!  Do not say in this section that this is college assignment.  Talk about what you are trying to accomplish as a software engineer to further your learning.}
+This project is a multi-room chatroom application built using Python socket programming and Tkinter. The application allows multiple users to connect to a central server, join chat rooms, and communicate with each other in real time through either a command-line client or a graphical user interface (GUI) client.
 
-{Provide a description the networking program that you wrote. Describe how to use your software.  If you did Client/Server, then you will need to describe how to start both.}
+The project was developed to strengthen my understanding of network communication, multithreading, client-server architecture, and GUI development. One of my main goals was to learn how backend networking systems interact with a frontend graphical interface while maintaining responsive real-time communication between multiple users. The server handles multiple clients simultaneously using Python threads and routes messages only to users within the same room.
 
-{Describe your purpose for writing this software.}
+To start the server: Run `python server.py` in your terminal
 
-{Provide a link to your YouTube demonstration.  It should be a 4-5 minute demo of the software running (you will need to show two pieces of software running and communicating with each other) and a walkthrough of the code.}
+To start the client: Run `python client_cli.py` or `python client_gui.py`, depending on if you want to run it in your terminal, or with the GUI.
 
-[Software Demo Video](http://youtube.link.goes.here) -->
+[Software Demo Video](http://youtube.link.goes.here)
 
 # Network Communication
 
-<!-- {Describe the architecture that you used (client/server or peer-to-peer)}
-
-{Identify if you are using TCP or UDP and what port numbers are used.}
-
-{Identify the format of messages being sent between the client and server or the messages sent between two peers.} -->
+This project uses a client-server architecture. A central server accepts incoming TCP connections from multiple clients and manages message routing between chat rooms. Clients communicate only through the server rather than directly with each other. This version runs on localhost (IP:127.0.0.1:5000). Messages between the client and server are formatted as JSON objects and encoded into UTF-8 bytes before being transmitted over the network. The server decodes incoming JSON messages, determines the message type, and processes the request accordingly.
 
 # Development Environment
 
-<!-- {Describe the tools that you used to develop the software}
+- Python 3
+- Visual Studio Code 
+- Windows 11 
+- Git / Github 
 
-{Describe the programming language that you used and any libraries.} -->
+Python Libraries 
+- socket 
+- threading
+- tkinter 
+- json
 
 # Useful Websites
 
 * [Official "socket" library Documentation](https://docs.python.org/3.14/library/socket.html#socket.socket.connect)
 * [How to use "socket" library](https://docs.python.org/3/howto/sockets.html)
+* [Official "tkinter" Documentation](https://docs.python.org/3/library/tkinter.html)
+* [Official "threading" Documentation](https://docs.python.org/3/library/threading.html)
 
 # Future Work
-<!-- 
-{Make a list of things that you need to fix, improve, and add in the future.}
-* Item 1
-* Item 2
-* Item 3
--->
+
+* Improve GUI design and layout
+* Improve room management and allow users to create rooms from the GUI
+* Add support for hosting across multiple machines instead of localhost only
