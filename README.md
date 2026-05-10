@@ -8,7 +8,7 @@ To start the server: Run `python server.py` in your terminal
 
 To start the client: Run `python client_cli.py` or `python client_gui.py`, depending on if you want to run it in your terminal, or with the GUI.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Chatroom App Video Demo](https://youtu.be/whXkLv8Y0zU)
 
 # Network Communication
 
